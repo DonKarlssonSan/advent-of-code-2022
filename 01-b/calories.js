@@ -10,9 +10,7 @@ export function getTopThreeCalories(caloriesString) {
       elves[elvesCounter] += Number.parseInt(calory, 10);
     }
   }
-  elves.sort((a, b) => { 
-    return b - a; // reverse
-  });
+  elves.sort((a, b) => b - a); // reverse order
   const sum = elves[0] + elves[1] + elves[2];
   return sum;
 }
