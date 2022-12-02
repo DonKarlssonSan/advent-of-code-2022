@@ -1,13 +1,36 @@
-export function a(inputString) {
+export function getTotalScore2(inputString) {
   const inputs = inputString.split("\n");
   let points = 0;
   for(const input of inputs) {
     const plays = input.split(" ");
     const playerA = plays[0];
-    const playerB = plays[1];
+    const expectedOutcome = plays[1];
+    const playerB = getPlay(playerA, expectedOutcome);
     points += getScore(playerA, playerB);
   }
   return points;
+}
+
+export function getPlay(first, outcome) {
+  // A X Rock
+  // B Y Paper
+  // C Z Scissors
+  const expectedOutcome = outcome.charCodeAt(0) - 89; // -1, 0 or 1
+  const firstPoints = first.charCodeAt(0) - 65;
+  let play = firstPoints + expectedOutcome;
+  play = wrap(play, 2);
+  const char = String.fromCharCode(play + 88);
+  return char;
+}
+
+function wrap(val, max) {
+  let ret = val;
+  if(val === -1) {
+    ret = max;
+  } else if(val === max + 1) {
+    ret = 0;
+  }
+  return ret;
 }
 
 export function getScore(first, second) {

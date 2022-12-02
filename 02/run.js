@@ -1,10 +1,10 @@
 
 import { input } from "./input.js";
-import { a } from "./a/a.js";
-import { b } from "./b/b.js";
+import { getTotalScore } from "./a/rochambeau.js";
+import { getTotalScore2 } from "./b/rochambeau.js";
 
-const resultA = a(input);
+const resultA = getTotalScore(input);
 console.log(resultA);
 
-const resultB = b(input);
+const resultB = getTotalScore2(input);
 console.log(resultB);
