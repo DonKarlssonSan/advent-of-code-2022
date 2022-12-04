@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { getOverlappingRanges, rangesOverlap } from "./b.js";
 
-describe("04-b Camp Cleanup", () => {
+describe("04-b Camp Cleanup - overlapping ranges", () => {
   it("should return 4 overlapping ranges", () => {
     const input = 
 `2-4,6-8
@@ -18,6 +18,7 @@ describe("04-b Camp Cleanup", () => {
     const result = rangesOverlap(1, 3, 2, 4);
     assert.equal(result, true);
   });
+
   it("should return true because ranges overlap", () => {
     const result = rangesOverlap(2, 4, 1, 3);
     assert.equal(result, true);
