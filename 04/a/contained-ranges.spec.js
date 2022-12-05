@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { getContainedRanges, isSecondRangeInFirst, isOneRangeInTheOther } from "./a.js";
+import { getContainedRanges, isSecondRangeInFirst, isOneRangeInTheOther } from "./contained-ranges.js";
 
 describe("04-a Camp Cleanup, contained ranges", () => {
   it("should return 2 fully containing ranges", () => {

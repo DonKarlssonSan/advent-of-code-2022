@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { getOverlappingRanges, rangesOverlap } from "./b.js";
+import { getOverlappingRanges, rangesOverlap } from "./overlapping-ranges.js";
 
 describe("04-b Camp Cleanup - overlapping ranges", () => {
   it("should return 4 overlapping ranges", () => {
