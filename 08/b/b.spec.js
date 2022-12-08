@@ -1,7 +1,7 @@
 import { assert } from "chai";
-import { b, getScore, getViewingDistance } from "./b.js";
+import { getHighestScenicScore, getScore, getViewingDistance } from "./b.js";
 
-describe("08-b ?", () => {
+describe("08-b Treetop Tree House", () => {
   const trees = [
     [3, 0, 3, 7, 3],
     [2, 5, 5, 1, 2],
@@ -17,7 +17,7 @@ describe("08-b ?", () => {
 65332
 33549
 35390`;
-    const result = b(input);
+    const result = getHighestScenicScore(input);
     assert.equal(result, 8);
   });
 

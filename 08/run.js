@@ -1,10 +1,10 @@
 
 import { input } from "./input.js";
-import { a } from "./a/a.js";
-import { b } from "./b/b.js";
+import { getNrOfVisibleTrees } from "./a/a.js";
+import { getHighestScenicScore } from "./b/b.js";
 
-const resultA = a(input);
+const resultA = getNrOfVisibleTrees(input);
 console.log(resultA);
 
-const resultB = b(input);
+const resultB = getHighestScenicScore(input);
 console.log(resultB);

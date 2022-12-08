@@ -1,4 +1,4 @@
-export function a(inputString) {
+export function getNrOfVisibleTrees(inputString) {
   const trees = parseTrees(inputString);
   let visible = 0;
   for(let row = 0; row < trees.length; row++) {
@@ -25,21 +25,19 @@ export function parseTrees(inputString) {
 
 function isVisible(trees, row, col) {
   const currentHeight = trees[row][col];
-  const above = getAllAbove(trees, row, col);
-  if(above.every(height => height < currentHeight)) {
-    return true
-  }
-  const below = getAllBelow(trees, row, col);
-  if(below.every(height => height < currentHeight)) {
-    return true;
-  }
-  const left = getAllToTheLeft(trees, row, col);
-  if(left.every(height => height < currentHeight)) {
-    return true;
-  }
-  const right = getAllToTheRight(trees, row, col);
-  if(right.every(height => height < currentHeight)) {
-    return true;
+  const rows = [];
+  rows.push(getAllAbove(trees, row, col));
+  rows.push(getAllBelow(trees, row, col));
+  rows.push(getAllToTheLeft(trees, row, col));
+  rows.push(getAllToTheRight(trees, row, col));
+  return allOnSameRowIsBelow(rows, currentHeight);
+}
+
+function allOnSameRowIsBelow(rows, threshold) {
+  for(const row of rows) {
+    if(row.every(height => height < threshold)) {
+      return true
+    }
   }
   return false;
 }
@@ -53,25 +51,25 @@ export function getAllAbove(trees, row, col) {
 }
 
 export function getAllBelow(trees, row, col) {
-  let above = [];
+  let below = [];
   for(let r = row + 1; r < trees.length; r++) {
-    above.push(trees[r][col]);
+    below.push(trees[r][col]);
   }
-  return above;
+  return below;
 }
 
 export function getAllToTheLeft(trees, row, col) {
-  let above = [];
+  let left = [];
   for(let c = 0; c < col; c++) {
-    above.push(trees[row][c]);
+    left.push(trees[row][c]);
   }
-  return above.reverse();
+  return left.reverse();
 }
 
 export function getAllToTheRight(trees, row, col) {
-  let above = [];
+  let right = [];
   for(let c = col + 1; c < trees[col].length; c++) {
-    above.push(trees[row][c]);
+    right.push(trees[row][c]);
   }
-  return above;
+  return right;
 }

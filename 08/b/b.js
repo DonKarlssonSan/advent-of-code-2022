@@ -1,6 +1,6 @@
 import { parseTrees, getAllAbove, getAllBelow, getAllToTheLeft, getAllToTheRight  } from "../a/a.js";
 
-export function b(inputString) {
+export function getHighestScenicScore(inputString) {
   const trees = parseTrees(inputString);
   let highestScore = 0;
   for(let row = 0; row < trees.length; row++) {

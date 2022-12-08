@@ -1,7 +1,7 @@
 import { assert } from "chai";
-import { a, getAllAbove, getAllBelow, getAllToTheLeft, getAllToTheRight } from "./a.js";
+import { getNrOfVisibleTrees, getAllAbove, getAllBelow, getAllToTheLeft, getAllToTheRight } from "./a.js";
 
-describe("08-a ?", () => {
+describe("08-a Treetop Tree House", () => {
   const trees = [
     [3, 0, 3, 7, 3],
     [2, 5, 5, 1, 2],
@@ -17,7 +17,7 @@ describe("08-a ?", () => {
 65332
 33549
 35390`;
-    const result = a(input);
+    const result = getNrOfVisibleTrees(input);
     assert.equal(result, 21);
   });
   
