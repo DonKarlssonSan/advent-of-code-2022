@@ -6,7 +6,6 @@ export function positionsVisitedByLongTail(inputString) {
     const [dir, length] = m.split(" ");
     move(history, rope, dir, length);
   }
-  console.log(history);
   return history.size;
 }
 

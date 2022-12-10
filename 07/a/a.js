@@ -1,7 +1,6 @@
 export function aggregateSizesAtMost(inputString, atMost) {
   const terminalOutput = inputString.split("\n");
   const tree = parseTree(terminalOutput);
-  console.log(tree);
   aggregateSizes(tree);
   const size = filterSizes(tree, atMost);
   return size;
