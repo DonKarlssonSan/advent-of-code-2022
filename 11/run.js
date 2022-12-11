@@ -1,10 +1,9 @@
 
 import { input } from "./input.js";
-import { a } from "./a/a.js";
-import { b } from "./b/b.js";
+import { getMonkeyBusiness } from "./a/a.js";
 
-const resultA = a(input);
+const resultA = getMonkeyBusiness(input);
 console.log(resultA);
 
-const resultB = b(input);
-console.log(resultB);
+// const resultB = getMonkeyBusiness(input, 10000, false);
+// console.log(resultB);

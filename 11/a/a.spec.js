@@ -1,9 +1,7 @@
 import { assert } from "chai";
-import { Monkey, a } from "./a.js";
+import { parseMonkeys, Monkey, getMonkeyBusiness } from "./a.js";
 
-describe("11-a Monkey in the Middle", () => {
-  it("should return 1", () => {
-    const input = 
+const input = 
 `Monkey 0:
 Starting items: 79, 98
 Operation: new = old * 19
@@ -31,11 +29,32 @@ Operation: new = old + 3
 Test: divisible by 17
   If true: throw to monkey 0
   If false: throw to monkey 1`;
-    const result = a(input);
-    assert.equal(result, 1);
+
+describe("11-a Monkey in the Middle", () => {
+  it("should return 4 monkeys", () => {
+    const rows = input.split("\n");
+    const result = parseMonkeys(rows);
+    assert.equal(result.length, 4);
+    assert.deepEqual(result[0].items, [79, 98]);
+    assert.equal(result[0].operation, "old * 19");
+    assert.equal(result[0].divisible, 23);
+    assert.equal(result[0].trueDestination, 2, "trueDestination");
+    assert.equal(result[0].falseDestination, 3, "falseDestination");
   });
 
-  it("should return thrown items 500 and 620", () => {
+  it("should return monkey business 10605", () => {
+    const result = getMonkeyBusiness(input);
+    assert.equal(result, 10605);
+  });
+
+  it("a monkey should not do anything if it has no items", () => {
+    const monkey = new Monkey([], "old + 1", 42, 1, 2);
+    const result = monkey.takeTurnAndGetItems();
+    assert.equal(result.length, 0);
+    assert.equal(monkey.inspections, 0);
+  });
+
+  it("Monkey 0 should return thrown items 500 and 620", () => {
     let items = [79, 98];
     const monkey = new Monkey(items, "old * 19", 23, 2, 3);
     const result = monkey.takeTurnAndGetItems();
@@ -44,6 +63,21 @@ Test: divisible by 17
       { recipient: 3, item: 620}
     ];
     assert.deepEqual(result, expectedItems);
-    assert.equal(0, monkey.items);
+    assert.equal(monkey.items, 0);
+  });
+
+  it("Monkey 1 should return thrown items 20, 23, 27, 26", () => {
+    let items = [54, 65, 75, 74];
+    const monkey = new Monkey(items, "old + 6", 19, 2, 0);
+    const result = monkey.takeTurnAndGetItems();
+    const expectedItems = [
+      { recipient: 0, item: 20},
+      { recipient: 0, item: 23},
+      { recipient: 0, item: 27},
+      { recipient: 0, item: 26},
+    ];
+    assert.deepEqual(result, expectedItems);
+    assert.equal(monkey.items.length, 0);
+    assert.equal(monkey.inspections, 4, "inspections");
   });
 });
