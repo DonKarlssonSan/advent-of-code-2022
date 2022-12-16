@@ -40,7 +40,7 @@ export function parseGrid(inputString) {
   return grid;
 }
 
-function getManhattanDistance(x1, y1, x2, y2) {
+export function getManhattanDistance(x1, y1, x2, y2) {
   return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 }
 
