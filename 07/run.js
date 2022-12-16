@@ -1,10 +1,10 @@
 
 import { input } from "./input.js";
-import { aggregateSizesAtMost } from "./a/a.js";
-import { b } from "./b/b.js";
+import { getSum } from "./a/a.js";
+import { findDirToDelete } from "./b/b.js";
 
-const resultA = aggregateSizesAtMost(input, 100000);
+const resultA = getSum(input, 100000);
 console.log(resultA);
 
-const resultB = b(input);
+const resultB = findDirToDelete(input);
 console.log(resultB);

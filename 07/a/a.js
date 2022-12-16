@@ -1,65 +1,57 @@
-export function aggregateSizesAtMost(inputString, atMost) {
-  const terminalOutput = inputString.split("\n");
-  const tree = parseTree(terminalOutput);
-  aggregateSizes(tree);
-  const size = filterSizes(tree, atMost);
-  return size;
+import * as path from "node:path";
+
+export function getSum(inputString, max) {
+  let dirs = getDirs(inputString);
+  enrichWithAggregatedSize(dirs);
+  let sum = 0;
+  for(const dir of dirs) {
+    if(dir.totalSize <= max) {
+      sum += dir.totalSize;
+    }
+  }
+  return sum;
 }
 
-export function parseTree(terminalOutput) {
-  let tree = {};
-  let currentDir = [];
-  for(const row of terminalOutput) {
-    if(row.startsWith("$ cd /")) {
-      continue;
-    } else if(row.startsWith("dir")) {
-      const name = row.substring(4);
-      setPropertyValue(tree, { "type": "dir" }, [...currentDir, name]);
+export function getDirs(inputString) {
+  const rows = inputString.split("\n");
+  let currentDir = "/";
+  let dirs = [];
+  dirs.push({ name: currentDir });
+  let currentSize = 0;
+  let listingMode = false;
+  for(const row of rows) {
+    if(row.startsWith("$ ")) {
+      if(listingMode) {
+        let dir = dirs.find(d => d.name === currentDir);
+        dir.size = currentSize;
+        currentSize = 0;
+      }
+      listingMode = false;
+      if(row.startsWith("$ ls")) {
+        listingMode = true;
+      }
+      if(row.startsWith("$ cd")) {
+        const name = row.substring(5);
+        currentDir = path.join(currentDir, name);
+      }
+    } else if(row.startsWith("dir ")) {
+      const dir = row.substring(4);
+      const name = path.join(currentDir, dir);
+      dirs.push({ name });
     } else if(!isNaN(row.split(" ")[0])) {
-      // file
-      const [fileSize, name] = row.split(" ");
-      setPropertyValue(tree, parseInt(fileSize, 10), [...currentDir, name]);
-    } else if(row.startsWith("$ cd ..")) {
-      currentDir.pop();
-    } else if(row.startsWith("$ cd")) {
-      const name = row.substring(5);
-      currentDir.push(name)
+      currentSize +=  parseInt(row.split(" ")[0]);
     }
   }
-  return tree;
-}
-
-export function aggregateSizes(tree) {
-  const props = Object.getOwnPropertyNames(tree);
-  const fileNames = props.filter(prop => prop !== "type" && tree[prop]?.type !== "dir");
-  let size = fileNames.map(fileName => tree[fileName]).reduce((a, b) => a + b, 0);
-
-  const dirs = props.filter(prop => tree[prop]?.type === "dir");
-  for(const dir of dirs) {
-    size += aggregateSizes(tree[dir]);
+  if(listingMode) {
+    let dir = dirs.find(d => d.name === currentDir);
+    dir.size = currentSize;
   }
-  tree.size = size;
-  return size;
+  return dirs;
 }
 
-export function filterSizes(tree, atMost) {
-  const props = Object.getOwnPropertyNames(tree);
-  let size = tree.size <= atMost ? tree.size : 0;
-
-  const dirs = props.filter(prop => tree[prop]?.type === "dir");
-  for(const dir of dirs) {
-    const s = filterSizes(tree[dir], atMost);
-    if(size + s <= atMost) {
-      size += s;
-    } else {
-      size = s;
-    }
+export function enrichWithAggregatedSize(dirs) {
+  for(let dir of dirs) {
+    const subdirs = dirs.filter(d => d.name.startsWith(dir.name) && d.name !== dir.name);
+    dir.totalSize = subdirs.map(d => d.size).reduce((acc, current) => acc + current, 0) + dir.size;
   }
-  return size <= atMost ? size : 0;
-}
-
-export function setPropertyValue(obj, value, path) {
-  for (let i = 0; i < path.length - 1; i++)
-      obj = obj[path[i]];
-  obj[path[path.length-1]] = value;
 }
