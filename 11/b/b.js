@@ -1,9 +1,8 @@
 export class Monkey {
   constructor(items, operation, divisible, trueDestination, falseDestination) {
     this.items = items;
-    const [operand1, operator, operand2] = operation.split(" ");
-    this.operation = `BigInt(${operand1}) ${operator} BigInt(${operand2})`;
-    this.divisible = BigInt(divisible);
+    this.operation = operation;
+    this.divisible = divisible;
     this.trueDestination = trueDestination;
     this.falseDestination = falseDestination;
     this.inspections = 0;
@@ -14,7 +13,7 @@ export class Monkey {
     return toThrow.map(old => {
       this.inspections++;
       let newValue = eval(this.operation) % commonDenominator;
-      const recipient = newValue % this.divisible === 0n ? this.trueDestination : this.falseDestination;
+      const recipient = newValue % this.divisible === 0 ? this.trueDestination : this.falseDestination;
       return {
         recipient: recipient,
         item: newValue
@@ -44,7 +43,7 @@ export function getMonkeyBusiness(inputString, iterations = 20) {
 export function parseMonkeys(rows) {
   let monkeys = [];
   for(let rowIndex = 0; rowIndex < rows.length; rowIndex += 7) {
-    const items = rows[rowIndex+1].substring(16).split(", ").map(number => BigInt(number));
+    const items = rows[rowIndex+1].substring(16).split(", ").map(number => parseInt(number, 10));
     const operation = rows[rowIndex+2].substring(17);
     const divisible = parseInt(rows[rowIndex+3].substring(19), 10);
     const trueDestination = parseInt(rows[rowIndex+4].substring(27), 10);
@@ -56,7 +55,7 @@ export function parseMonkeys(rows) {
 }
 
 function getCommonDenominator(monkeys) {
-  let cd = 1n;
+  let cd = 1;
   for(const monkey of monkeys) {
     cd *= monkey.divisible;
   }
