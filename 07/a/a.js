@@ -20,38 +20,68 @@ export function getDirs(inputString) {
   let currentSize = 0;
   let listingMode = false;
   for(const row of rows) {
-    if(row.startsWith("$ ")) {
+    if(isCommand(row)) {
       if(listingMode) {
-        let dir = dirs.find(d => d.name === currentDir);
-        dir.size = currentSize;
+        setSize(dirs, currentDir, currentSize);
         currentSize = 0;
       }
       listingMode = false;
-      if(row.startsWith("$ ls")) {
+      if(isListing(row)) {
         listingMode = true;
+      } else if(isChangeDir(row)) {
+        currentDir = changeDir(currentDir, row);
       }
-      if(row.startsWith("$ cd")) {
-        const name = row.substring(5);
-        currentDir = path.join(currentDir, name);
-      }
-    } else if(row.startsWith("dir ")) {
-      const dir = row.substring(4);
-      const name = path.join(currentDir, dir);
-      dirs.push({ name });
-    } else if(!isNaN(row.split(" ")[0])) {
-      currentSize +=  parseInt(row.split(" ")[0]);
+    } else if(isDir(row)) {
+      addDir(dirs, currentDir, row);
+    } else if(isFile(row)) {
+      currentSize += parseInt(row.split(" ")[0]);
     }
   }
   if(listingMode) {
-    let dir = dirs.find(d => d.name === currentDir);
-    dir.size = currentSize;
+    setSize(dirs, currentDir, currentSize);
   }
   return dirs;
 }
 
+function isFile(row) { 
+  return !isNaN(row.split(" ")[0]); 
+}
+
+function isListing(row) {
+  return row.startsWith("$ ls");
+}
+
+function isDir(row) { 
+  return row.startsWith("dir ") 
+}
+
+function isCommand(row) {
+  return row.startsWith("$ ");
+}
+
+function isChangeDir(row) {
+  return row.startsWith("$ cd");
+}
+
+function addDir(dirs, currentDir, row) {
+  const dir = row.substring(4);
+  const name = path.join(currentDir, dir);
+  dirs.push({ name });
+}
+
+function changeDir(currentDir, row) {
+  const name = row.substring(5);
+  return path.join(currentDir, name);
+}
+
+function setSize(dirs, currentDir, currentSize) {
+  let dir = dirs.find(d => d.name === currentDir);
+  dir.size = currentSize;
+}
+
 export function enrichWithAggregatedSize(dirs) {
   for(let dir of dirs) {
-    const subdirs = dirs.filter(d => d.name.startsWith(dir.name) && d.name !== dir.name);
-    dir.totalSize = subdirs.map(d => d.size).reduce((acc, current) => acc + current, 0) + dir.size;
+    const subDirs = dirs.filter(d => d.name.startsWith(dir.name) && d.name !== dir.name);
+    dir.totalSize = subDirs.map(d => d.size).reduce((acc, current) => acc + current, 0) + dir.size;
   }
 }
