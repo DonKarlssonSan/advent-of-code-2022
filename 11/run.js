@@ -6,5 +6,5 @@ import { getMonkeyBusiness as getMonkeyBusiness2 } from "./b/b.js";
 const resultA = getMonkeyBusiness(input);
 console.log(resultA);
 
-//const resultB = getMonkeyBusiness2(input, 10000);
-//console.log(resultB);
+const resultB = getMonkeyBusiness2(input, 10000);
+console.log(resultB);

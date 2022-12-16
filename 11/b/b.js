@@ -9,11 +9,11 @@ export class Monkey {
     this.inspections = 0;
   }
 
-  takeTurnAndGetItems() {
+  takeTurnAndGetItems(commonDenominator) {
     let toThrow = this.items.splice(0);
     return toThrow.map(old => {
       this.inspections++;
-      let newValue = eval(this.operation);
+      let newValue = eval(this.operation) % commonDenominator;
       const recipient = newValue % this.divisible === 0n ? this.trueDestination : this.falseDestination;
       return {
         recipient: recipient,
@@ -27,9 +27,10 @@ export function getMonkeyBusiness(inputString, iterations = 20) {
   const input = inputString.split("\n");
 
   const monkeys = parseMonkeys(input);
+  const commonDenominator = getCommonDenominator(monkeys);
   for(let i = 0; i < iterations; i++) {
     for(const monkey of monkeys) {
-      const throwAways = monkey.takeTurnAndGetItems();
+      const throwAways = monkey.takeTurnAndGetItems(commonDenominator);
       for(const throwAway of throwAways) {
         monkeys[throwAway.recipient].items.push(throwAway.item);
       }
@@ -52,4 +53,12 @@ export function parseMonkeys(rows) {
     monkeys.push(monkey);
   }
   return monkeys;
+}
+
+function getCommonDenominator(monkeys) {
+  let cd = 1n;
+  for(const monkey of monkeys) {
+    cd *= monkey.divisible;
+  }
+  return cd;
 }
