@@ -13,7 +13,7 @@ function breadthFirst(grid, start, end) {
   while(queue.length > 0) {
     [current, dist] = queue.shift();
     if(current === end) return dist;
-    console.log(current, String.fromCharCode(current.value));
+    //console.log(current, String.fromCharCode(current.value));
     for(let neighbor of getNeighbors(grid, current)) {
       if(!visited.has(neighbor)) {
         visited.add(neighbor);
