@@ -4,7 +4,7 @@ export function getSteps(inputString, start, end) {
   return steps;
 }
 
-function breadthFirst(grid, start, end) {
+export function breadthFirst(grid, start, end) {
   let visited = new Set([start]);
 
   const queue = [[start, 0]];
@@ -22,7 +22,7 @@ function breadthFirst(grid, start, end) {
     }
   }
   console.log(`Giving up at ${current}, ${dist}`);
-  return -1;
+  return Infinity;
 }
 
 export function parseGrid(inputString) {
