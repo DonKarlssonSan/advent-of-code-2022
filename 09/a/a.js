@@ -30,32 +30,32 @@ export function move(history, rope, direction, length) {
 }
 
 export function moveOneStep(rope, direction) {
-  moveHead(rope, direction);
-  moveTail(rope);
+  moveHead(rope.head, direction);
+  moveTail(rope.head, rope.tail);
 }
 
-function moveHead(rope, direction) {
+export function moveHead(head, direction) {
   if(direction === "R") {
-    rope.head.x += 1;
+    head.x += 1;
   } else if(direction === "L") {
-    rope.head.x -= 1;
+    head.x -= 1;
   } else if(direction === "U") {
-    rope.head.y -= 1;
+    head.y -= 1;
   } else if(direction === "D") {
-    rope.head.y += 1;
+    head.y += 1;
   }
 }
 
-function moveTail(rope) {
-  if(!touching(rope.head, rope.tail)) {
-    let xDiff = rope.head.x - rope.tail.x;
-    let yDiff = rope.head.y - rope.tail.y;
+export function moveTail(head, tail) {
+  if(!touching(head, tail)) {
+    let xDiff = head.x - tail.x;
+    let yDiff = head.y - tail.y;
     if(xDiff === 0) {
       // vertically 
-      rope.tail.y += yDiff / 2;
+      tail.y += yDiff / 2;
     } else if(yDiff === 0) {
       // horizontally
-      rope.tail.x += xDiff / 2;
+      tail.x += xDiff / 2;
     } else {
       // diagonally
       if(Math.abs(xDiff) > 1) {
@@ -63,8 +63,8 @@ function moveTail(rope) {
       } else if(Math.abs(yDiff) > 1) {
         yDiff *= 0.5;
       }
-      rope.tail.x += xDiff;
-      rope.tail.y += yDiff;
+      tail.x += xDiff;
+      tail.y += yDiff;
     }
   }
 }

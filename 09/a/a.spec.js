@@ -31,6 +31,7 @@ R 2`;
     assert.deepEqual(rope.head, { x: 4, y: 2 }); 
     assert.deepEqual(rope.tail, { x: 3, y: 2 }); 
   });
+
   it("should move the tail left when head goes left", () => {
     let rope = {
       head: {
@@ -47,7 +48,7 @@ R 2`;
     assert.deepEqual(rope.tail, { x: 3, y: 2 }); 
   });
 
-  it("should move the tail diagonally", () => {
+  it("should move the tail diagonally, up", () => {
     let rope = {
       head: {
         x: 2,
@@ -60,6 +61,22 @@ R 2`;
     };
     moveOneStep(rope, "U");
     assert.deepEqual(rope.head, { x: 2, y: 1 }, "head"); 
+    assert.deepEqual(rope.tail, { x: 2, y: 2 }, "tail"); 
+  });
+
+  it("should move the tail diagonally, right", () => {
+    let rope = {
+      head: {
+        x: 2,
+        y: 2
+      },
+      tail: {
+        x: 1,
+        y: 3
+      }
+    };
+    moveOneStep(rope, "R");
+    assert.deepEqual(rope.head, { x: 3, y: 2 }, "head"); 
     assert.deepEqual(rope.tail, { x: 2, y: 2 }, "tail"); 
   });
 
