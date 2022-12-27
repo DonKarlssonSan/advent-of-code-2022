@@ -60,7 +60,8 @@ export function moveTail(head, tail) {
       // diagonally
       if(Math.abs(xDiff) > 1) {
         xDiff *= 0.5;
-      } else if(Math.abs(yDiff) > 1) {
+      }
+      if(Math.abs(yDiff) > 1) {
         yDiff *= 0.5;
       }
       tail.x += xDiff;

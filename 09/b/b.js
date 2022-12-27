@@ -7,7 +7,6 @@ export function positionsVisitedByLongTail(inputString) {
   for(const m of moves) {
     const [dir, length] = m.split(" ");
     move(history, rope, dir, parseInt(length));
-    // drawRope(rope);
   }
   return history.size;
 }
@@ -42,6 +41,7 @@ export function move(history, rope, direction, length) {
     moveOneStep(rope, direction);
     const last = rope[rope.length-1];
     history.add(`${last.x} : ${last.y}`);
+    //drawRope(rope);
   }
 }
 

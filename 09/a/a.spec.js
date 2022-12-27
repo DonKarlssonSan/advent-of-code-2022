@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { positionsVisitedByTail, moveOneStep, touching } from "./a.js";
+import { positionsVisitedByTail, moveOneStep, moveTail, touching } from "./a.js";
 
 describe("09-a Rope Bridge", () => {
   it("should return 13 visited positions", () => {
@@ -78,6 +78,19 @@ R 2`;
     moveOneStep(rope, "R");
     assert.deepEqual(rope.head, { x: 3, y: 2 }, "head"); 
     assert.deepEqual(rope.tail, { x: 2, y: 2 }, "tail"); 
+  });
+
+  it("should move the tail diagonally", () => {
+    let head = {
+      x: 2,
+      y: 2
+    };
+    let tail = {
+      x: 0,
+      y: 4
+    };
+    moveTail(head, tail);
+    assert.deepEqual(tail, { x: 1, y: 3 }, "tail"); 
   });
 
   it("should not move the tail if they start on same point", () => {
