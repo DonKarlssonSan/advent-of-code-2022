@@ -110,7 +110,7 @@ function getWidthOfShape(shapeIndex) {
   return widths[shapeIndex];
 }
 
-function canShapeMoveSideWays(shapeIndex, currentPos, grid, movement) {
+export function canShapeMoveSideWays(shapeIndex, currentPos, grid, movement) {
   let newPos = {
    x: currentPos.x + movement,
    y: currentPos.y
@@ -134,7 +134,7 @@ function collidesWithGrid(shapeIndex, pos, grid) {
   return false;
 }
 
-function canShapeMoveDown(shapeIndex, pos, grid) {
+export function canShapeMoveDown(shapeIndex, pos, grid) {
   if(pos.y === 0) return false;
   let newPos = {
     y: pos.y - 1,
