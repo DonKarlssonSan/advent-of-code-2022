@@ -17,19 +17,13 @@ export function comparePair(pair) {
     let r = right[i];
     if(r === undefined) {
       return false;
-    }
-    if(Number.isInteger(l) && Array.isArray(r)) {
-      const c = comparePair([[l], r]);
-      if(!c) {
-        return false;
-      }
-    } else if(Array.isArray(l) && Array.isArray(r)) {
-      const c = comparePair([l, r]);
-      if(!c) {
-        return false;
-      }
-    }
-    if(l > r) {
+    } else if(Number.isInteger(l) && Array.isArray(r)) {
+      return comparePair([[l], r]);
+    } else if(Array.isArray(l) && Number.isInteger(r)) {
+      return comparePair([l, [r]]);
+      } else if(Array.isArray(l) && Array.isArray(r)) {
+      return comparePair([l, r]);
+    } else if(l > r) {
       return false;
     }
   }

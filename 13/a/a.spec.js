@@ -83,6 +83,15 @@ describe.only("13-a Distress Signal", () => {
     assert.isFalse(result);
   });
 
+  it("should return wrong order (mixed), false", () => {
+    const input = [
+      [[12, 2]],
+      [1]
+    ];
+    const result = comparePair(input);
+    assert.isFalse(result);
+  });
+
   it("should return sum of correct indexes 13", () => {
     const input =
 `[1,1,3,1,1]
