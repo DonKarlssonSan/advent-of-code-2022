@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { sumOfIndexesForCorrectPairs, comparePair } from "./a.js";
 
-describe.only("13-a Distress Signal", () => {
+describe("13-a Distress Signal", () => {
   it("1) should return right order, true", () => {
     const input = [
      [1,1,3,1,1],
