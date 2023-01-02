@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { getNrOfEmptyTilesAfter, parseGrid, move, getNrOfGroundTiles } from "./a.js";
 
-describe("23-a Unstable Diffusion", () => {
+describe.only("23-a Unstable Diffusion", () => {
   const input = 
 `..............
 ..............
@@ -22,8 +22,8 @@ describe("23-a Unstable Diffusion", () => {
 
   it("should parse grid", () => {
     const grid = parseGrid(input);
-    assert.isFalse(grid[0][0]);
-    assert.isTrue(grid[7][2]);
+    assert.isFalse(grid.has("0:0"));
+    assert.isTrue(grid.has("7:2"));
   });
 
   it("should move, first", () => {
@@ -36,9 +36,9 @@ describe("23-a Unstable Diffusion", () => {
 .....`;
     const grid = parseGrid(input);
     move(grid, 0);
-    assert.isTrue(grid[2][0]);
-    assert.isTrue(grid[3][0]);
-    assert.isTrue(grid[3][3]);
+    assert.isTrue(grid.has("2:0"));
+    assert.isTrue(grid.has("3:0"));
+    assert.isTrue(grid.has("3:3"));
   });
 
   it("should move, second", () => {
@@ -51,10 +51,10 @@ describe("23-a Unstable Diffusion", () => {
 .....`;
     const grid = parseGrid(input);
     move(grid, 1);
-    assert.isTrue(grid[2][1]);
-    assert.isTrue(grid[3][1]);
-    assert.isTrue(grid[1][2]);
-    assert.isTrue(grid[4][3]);
+    assert.isTrue(grid.has("2:1"));
+    assert.isTrue(grid.has("3:1"));
+    assert.isTrue(grid.has("1:2"));
+    assert.isTrue(grid.has("4:3"));
   });
 
   it("should move, third", () => {
@@ -67,10 +67,10 @@ describe("23-a Unstable Diffusion", () => {
 ..#..`;
     const grid = parseGrid(input);
     move(grid, 2);
-    assert.isTrue(grid[2][0]);
-    assert.isFalse(grid[3][0]);
-    assert.isTrue(grid[4][1]);
-    assert.isTrue(grid[0][2]);
+    assert.isTrue(grid.has("2:0"));
+    assert.isFalse(grid.has("3:0"));
+    assert.isTrue(grid.has("4:1"));
+    assert.isTrue(grid.has("0:2"));
   });
 
   it("should return 110 ground tiles", () => {

@@ -3,16 +3,16 @@ export function getNrOfEmptyTilesAfter(inputString, iterations) {
   const grid = parseGrid(inputString);
   for(let i = 0; i < iterations; i++) {
     move(grid, i);
-    drawGrid(grid);
+    //drawGrid(grid);
   }
   return getNrOfGroundTiles(grid);
 }
 
 function drawGrid(grid) {
-  for(let y = 0; y < grid[0].length; y++) {
+  for(let y = -10; y < 80; y++) {
     let row = "";
-    for(let x = 0; x < grid.length; x++) {
-      row += grid[x][y] ? "#" : ".";
+    for(let x = -10; x < 80; x++) {
+      row += grid.has(`${x}:${y}`) ? "#" : ".";
     }
     console.log(row);
   }
@@ -20,14 +20,15 @@ function drawGrid(grid) {
 }
 
 export function getNrOfGroundTiles(grid) {
-  let minX = grid.length-1;
-  let maxX = 0;
-  let minY = grid[0].length-1;
-  let maxY = 0;
+  let m = 100;
+  let minX = m;
+  let maxX = -m;
+  let minY = m;
+  let maxY = -m;
 
-  for(let x = 0; x < grid.length; x++) {
-    for(let y = 0; y < grid[x].length; y++) {
-      if(grid[x][y]) {
+  for(let x = -m; x < m; x++) {
+    for(let y = -m; y < m; y++) {
+      if(grid.has(`${x}:${y}`)) {
         if(x < minX) {
           minX = x;
         }
@@ -43,13 +44,12 @@ export function getNrOfGroundTiles(grid) {
       }
     }
   }
-  console.log(minX, maxX, minY, maxY);
-  console.log(grid.length, grid[0].length);
+  //console.log(minX, maxX, minY, maxY);
 
   let count = 0;
   for(let x = minX; x <= maxX; x++) {
     for(let y = minY; y <= maxY; y++) {
-      if(!grid[x][y]) {
+      if(!grid.has(`${x}:${y}`)) {
         count++;
       }
     }
@@ -59,12 +59,13 @@ export function getNrOfGroundTiles(grid) {
 
 export function parseGrid(inputString) {
   const rows = inputString.split("\n");
-  let grid = new Array(rows[0].length);
+  let grid = new Set();
   for(let col = 0; col < rows[0].length; col++) {
-    grid[col] = new Array(rows.length);
     for(let row = 0; row < rows.length; row++) {
-      const val = rows[row][col] === "#";
-      grid[col][row] = val;
+      if(rows[row][col] === "#") {
+        const key = `${col}:${row}`;
+        grid.add(key);
+      }
     }
   }
   return grid;
@@ -73,9 +74,10 @@ export function parseGrid(inputString) {
 export function move(grid, i) {
   let proposals = {};
   let proposalsToDelete = [];
-  for(let x = 0; x < grid.length; x++) {
-    for(let y = 0; y < grid[x].length; y++) {
-      if(grid[x][y] && hasAnyNeighbors(grid, x, y)) {
+  let m = 100;
+  for(let x = -m; x < m; x++) {
+    for(let y = -m; y < m; y++) {
+      if(grid.has(`${x}:${y}`) && hasAnyNeighbors(grid, x, y)) {
         const proposal = getProposal(grid, x, y, i);
         if(proposal) {
           const key = `${proposal.to.x}:${proposal.to.y}`;
@@ -93,8 +95,8 @@ export function move(grid, i) {
   }
   for(const key in proposals) {
     const p = proposals[key];
-    grid[p.from.x][p.from.y] = false;
-    grid[p.to.x][p.to.y] = true;
+    grid.delete(`${p.from.x}:${p.from.y}`);
+    grid.add(`${p.to.x}:${p.to.y}`);
   }
 }
 
@@ -122,16 +124,16 @@ function getProposal(grid, x, y, i) {
 function getNewPosIfNoNeighbors(grid, x0, y0, direction) {
   if(direction === "N") {
     const y = y0 - 1;
-    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y] && y >= 0) return [x0, y];
+    if(!grid.has(`${x0-1}:${y}`) && !grid.has(`${x0}:${y}`) && !grid.has(`${x0+1}:${y}`)) return [x0, y];
   } else if(direction === "S") {
     const y = y0 + 1;
-    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y] && y < grid[x0].length) return [x0, y];
+    if(!grid.has(`${x0-1}:${y}`) && !grid.has(`${x0}:${y}`) && !grid.has(`${x0+1}:${y}`)) return [x0, y];
   } else if(direction === "W") {
     const x = x0 - 1;
-    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1] && x >= 0) return [x, y0];
+    if(!grid.has(`${x}:${y0-1}`) && !grid.has(`${x}:${y0}`) && !grid.has(`${x}:${y0+1}`)) return [x, y0];
   } else if(direction === "E") {
     const x = x0 + 1;
-    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1] && x < grid.length) return [x, y0];
+    if(!grid.has(`${x}:${y0-1}`) && !grid.has(`${x}:${y0}`) && !grid.has(`${x}:${y0+1}`)) return [x, y0];
   }
   return;
 }
@@ -139,7 +141,7 @@ function getNewPosIfNoNeighbors(grid, x0, y0, direction) {
 function hasAnyNeighbors(grid, x0, y0) {
   for(let x = x0 - 1; x <= x0 + 1; x++) {
     for(let y = y0 - 1; y <= y0 + 1; y++) {
-      if(grid?.[x]?.[y] && !(x === x0 && y === y0)) {
+      if(grid.has(`${x}:${y}`) && !(x === x0 && y === y0)) {
         return true;
       }
     }
