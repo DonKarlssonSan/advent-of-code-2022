@@ -3,8 +3,8 @@ export function getNrOfEmptyTilesAfter(inputString, iterations) {
   const grid = parseGrid(inputString);
   for(let i = 0; i < iterations; i++) {
     move(grid, i);
+    drawGrid(grid);
   }
-  drawGrid(grid);
   return getNrOfGroundTiles(grid);
 }
 
@@ -16,6 +16,7 @@ function drawGrid(grid) {
     }
     console.log(row);
   }
+  console.log("-------------------------");
 }
 
 export function getNrOfGroundTiles(grid) {
@@ -121,16 +122,16 @@ function getProposal(grid, x, y, i) {
 function getNewPosIfNoNeighbors(grid, x0, y0, direction) {
   if(direction === "N") {
     const y = y0 - 1;
-    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y]) return [x0, y];
+    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y] && y >= 0) return [x0, y];
   } else if(direction === "S") {
     const y = y0 + 1;
-    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y]) return [x0, y];
+    if(!grid?.[x0-1]?.[y] && !grid?.[x0]?.[y] && !grid?.[x0+1]?.[y] && y < grid[x0].length) return [x0, y];
   } else if(direction === "W") {
     const x = x0 - 1;
-    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1]) return [x, y0];
+    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1] && x >= 0) return [x, y0];
   } else if(direction === "E") {
     const x = x0 + 1;
-    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1]) return [x, y0];
+    if(!grid?.[x]?.[y0-1] && !grid?.[x]?.[y0] && !grid?.[x]?.[y0+1] && x < grid.length) return [x, y0];
   }
   return;
 }
