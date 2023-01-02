@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { getNrOfEmptyTilesAfter, parseGrid, move, getNrOfGroundTiles } from "./a.js";
 
-describe.only("23-a Unstable Diffusion", () => {
+describe("23-a Unstable Diffusion", () => {
   const input = 
 `..............
 ..............
