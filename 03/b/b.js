@@ -1,3 +1,5 @@
+import { getPriority } from "../a/a.js";
+
 export function getPrioritySum(rucksacksString) {
   const rucksacks = rucksacksString.split("\n");
   let prioritySum = 0;
@@ -23,15 +25,4 @@ export function getCommonItem(items) {
     }
   }
   return "";
-}
-
-export function getPriority(char) {
-  // A - ASCII 65, prio 27
-  // a - ASCII 97 prio 1
-  const offset = isLowerCase(char) ? 97 - 1 : 65 - 27;
-  return char.charCodeAt(0) - offset;
-}
-
-function isLowerCase(str) {
-  return str === str.toLowerCase();
 }

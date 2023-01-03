@@ -22,7 +22,7 @@ export function isSecondRangeInFirst(firstStart, firstEnd, secondStart, secondEn
   return secondStart >= firstStart && secondEnd <= firstEnd; 
 }
 
-function split(range) {
+export function split(range) {
   const parts = range.split("-");
   const start = parseInt(parts[0], 10);
   const end = parseInt(parts[1], 10);
