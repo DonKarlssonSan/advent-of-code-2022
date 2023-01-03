@@ -22,28 +22,24 @@ function drawGrid(grid) {
 }
 
 export function getNrOfGroundTiles(grid) {
-  let m = 100;
-  let minX = m;
-  let maxX = -m;
-  let minY = m;
-  let maxY = -m;
+  let minX = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
 
-  for(let x = -m; x < m; x++) {
-    for(let y = -m; y < m; y++) {
-      if(grid.has(`${x}:${y}`)) {
-        if(x < minX) {
-          minX = x;
-        }
-        if(x > maxX) {
-          maxX = x;
-        }
-        if(y < minY) {
-          minY = y;
-        }
-        if(y > maxY) {
-          maxY = y;
-        }
-      }
+  for(const cell of grid.values()) {
+    const [x, y] = cell.split(":").map(n => parseInt(n));
+    if(x < minX) {
+      minX = x;
+    }
+    if(x > maxX) {
+      maxX = x;
+    }
+    if(y < minY) {
+      minY = y;
+    }
+    if(y > maxY) {
+      maxY = y;
     }
   }
   //console.log(minX, maxX, minY, maxY);
@@ -75,24 +71,22 @@ export function parseGrid(inputString) {
 
 export function move(grid, i) {
   let proposals = new Map();
-  let proposalsToDelete = [];
-  let m = 100;
-  for(let x = -m; x < m; x++) {
-    for(let y = -m; y < m; y++) {
-      if(grid.has(`${x}:${y}`) && hasAnyNeighbors(grid, x, y)) {
-        const proposal = getProposal(grid, x, y, i);
-        if(proposal) {
-          const key = `${proposal.to.x}:${proposal.to.y}`;
-          if(proposals.has(key)) {
-            proposalsToDelete.push(key);
-          } else {
-            proposals.set(key, proposal);
-          }
+  let proposalsToDelete = new Set();
+  for(const cell of grid.values()) {
+    const [x, y] = cell.split(":").map(n => parseInt(n));
+    if(hasAnyNeighbors(grid, x, y)) {
+      const proposal = getProposal(grid, x, y, i);
+      if(proposal) {
+        const key = `${proposal.to.x}:${proposal.to.y}`;
+        if(proposals.has(key)) {
+          proposalsToDelete.add(key);
+        } else {
+          proposals.set(key, proposal);
         }
       }
     }
   }
-  for(const proposal of proposalsToDelete) {
+  for(const proposal of proposalsToDelete.values()) {
     proposals.delete(proposal);
   }
   let didMove = false;
