@@ -1,10 +1,12 @@
 
 export function getNrOfEmptyTilesAfter(inputString, iterations) {
+  console.time("getNrOfEmptyTilesAfter");
   const grid = parseGrid(inputString);
   for(let i = 0; i < iterations; i++) {
     move(grid, i);
     //drawGrid(grid);
   }
+  console.timeEnd("getNrOfEmptyTilesAfter");
   return getNrOfGroundTiles(grid);
 }
 
@@ -72,7 +74,7 @@ export function parseGrid(inputString) {
 }
 
 export function move(grid, i) {
-  let proposals = {};
+  let proposals = new Map();
   let proposalsToDelete = [];
   let m = 100;
   for(let x = -m; x < m; x++) {
@@ -81,23 +83,26 @@ export function move(grid, i) {
         const proposal = getProposal(grid, x, y, i);
         if(proposal) {
           const key = `${proposal.to.x}:${proposal.to.y}`;
-          if(proposals[key]) {
+          if(proposals.has(key)) {
             proposalsToDelete.push(key);
           } else {
-            proposals[key] = proposal;
+            proposals.set(key, proposal);
           }
         }
       }
     }
   }
   for(const proposal of proposalsToDelete) {
-    delete proposals[proposal];
+    proposals.delete(proposal);
   }
-  for(const key in proposals) {
-    const p = proposals[key];
+  let didMove = false;
+  proposals.forEach(p => {
+    didMove = true;
     grid.delete(`${p.from.x}:${p.from.y}`);
     grid.add(`${p.to.x}:${p.to.y}`);
-  }
+  });
+
+  return didMove;
 }
 
 function getProposal(grid, x, y, i) {

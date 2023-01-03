@@ -1,10 +1,10 @@
 
 import { input } from "./input.js";
 import { getNrOfEmptyTilesAfter } from "./a/a.js";
-import { b } from "./b/b.js";
+import { getNrOfMoves } from "./b/b.js";
 
-const resultA = getNrOfEmptyTilesAfter(input, 10);
+const resultA = getNrOfEmptyTilesAfter(input, 1000);
 console.log(resultA);
 
-const resultB = b(input);
+const resultB = getNrOfMoves(input);
 console.log(resultB);

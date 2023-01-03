@@ -15,7 +15,7 @@ describe("23-a Unstable Diffusion", () => {
 ..............
 ..............
 ..............`;
-    it("should return 110", () => {
+  it("should return 110", () => {
     const result = getNrOfEmptyTilesAfter(input, 10);
     assert.equal(result, 110);
   });
